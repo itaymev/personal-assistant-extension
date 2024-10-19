@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Personal Assistant Extension",
+  "version": "1.0",
+  "description": "A Chrome extension that acts as a personal assistant.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

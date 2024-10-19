@@ -1,0 +1,52 @@
+/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+#note-textarea {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#save-note {
+    margin-bottom: 10px;
+}
+
+#saved-notes {
+    margin-top: 10px;
+}
+
+.note {
+    margin-bottom: 10px;
+}
+
+.note textarea {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.note button {
+    display: block;
+    margin-top: 5px;
+}
+
+#citation-page div {
+    margin-bottom: 10px;
+}
+
+#citation-page label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#citation-page input {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+}
