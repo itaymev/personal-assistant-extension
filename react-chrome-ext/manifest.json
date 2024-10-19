@@ -6,5 +6,14 @@
     "action": {
         "default_popup": "js/index.html",
         "default_title": "React Chrome Extension"
+    },
+    "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E",
+        "mac": "Command+Shift+E"
+      },
+      "description": "Open the Personal Assistant Extension"
     }
+  }
 }
