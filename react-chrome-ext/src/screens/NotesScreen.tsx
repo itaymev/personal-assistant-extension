@@ -18,13 +18,13 @@ export default function Notes(props: NotesProps) {
     // load saved notes (on startup and after saving a new note)
     function loadSavedNotes() {
         chrome.storage.sync.get('userNotes', (data) => {
-            setUserNotes(data.userNotes);
+            setUserNotes(data.userNotes ?? []);
         })
     }
 
     function saveNotes() {
         let notes = userNotes;
-        if (notes.length >= 50) {
+        if (notes?.length >= 50) {
             alert('Maximum of 50 notes reached.');
             return;
         }
@@ -34,6 +34,7 @@ export default function Notes(props: NotesProps) {
         });
 
         loadSavedNotes();
+        setNote('');
     }
 
     // delete note
