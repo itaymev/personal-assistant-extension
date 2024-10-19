@@ -57,6 +57,14 @@ const ArticleSummarizer = () => {
   return (
     <div>
       <h2>Article Summarizer</h2>
+      <div className="slider-container">
+        <div className="slider">
+            <div className="block" data-index="0">Block 1</div>
+            <div className="block" data-index="1">Block 2</div>
+            <div className="block" data-index="2">Block 3</div>
+        </div>
+        <div className="active-block"></div>
+    </div>
       <input
         type="text"
         value={url}
