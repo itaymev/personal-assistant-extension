@@ -5,7 +5,7 @@ import torch
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/summarize": {"origins": "chrome-extension://dkfokajnbcplkoigpifbboiiopfjegpl"}})
+CORS(app)
 
 goose = Goose()
 device = 0 if torch.cuda.is_available() else -1
