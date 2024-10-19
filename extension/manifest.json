@@ -20,5 +20,14 @@
       "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+E+D",
+        "mac": "Command+E+D"
+      },
+      "description": "Open the Personal Assistant Extension"
+    }
+  }
 }
