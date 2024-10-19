@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css'; // Assuming you have a CSS file for styling
+import ArticleSummarizer from './articleSummarizer';
 
 export default function PersonalAssistant() {
   const [view, setView] = useState('home');
@@ -70,6 +71,7 @@ export default function PersonalAssistant() {
           <button id="back-to-home-citation" onClick={handleBackToHome}>Back to Home</button>
         </div>
       )}
+      <ArticleSummarizer/>
     </div>
   );
 }
