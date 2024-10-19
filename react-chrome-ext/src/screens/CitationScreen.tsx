@@ -1,5 +1,5 @@
 //React
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type CitationProps = {
     backToHome: () => void;
@@ -13,14 +13,23 @@ export default function Citation(props: CitationProps) {
     const [pubDate, setPubDate] = useState('');
     const [name, setName] = useState('');
 
-    function fillAndCite() {
-        const pageDetails = {
-            url: window.location.href,
-            title: document.title || '',
-            author: document.querySelector('meta[name="author"]')?.getAttribute('content') ?? '',
-            publicationDate: document.querySelector('meta[name="date"]')?.getAttribute('content') ?? '',
-            websiteName: document.querySelector('meta[property="og:site_name"]')?.getAttribute('content') ?? window.location.hostname
+    useEffect(() => {
+        const getCurrentTabUrl = async () => {
+            try {
+                const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+                if (tabs.length > 0) {
+                    setUrl(tabs[0].url || '');
+                }
+            } catch (error) {
+                console.error("Error getting current tab UtRL:", error);
+            }
         };
+
+        getCurrentTabUrl()
+    }, [])
+
+    function fillAndCite() {
+        const pageDetails = getPageDetails();
         setUrl(pageDetails.url);
         setTitle(pageDetails.title);
         setAuthor(pageDetails.author);
