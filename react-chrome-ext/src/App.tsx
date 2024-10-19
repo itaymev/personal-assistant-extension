@@ -23,7 +23,7 @@ export default function PersonalAssistant() {
 
   return (
     <div>
-      <h1>Personal Assistant</h1>
+      <h1>Ed</h1>
 
       {/* Home Page */}
       {view === 'home' && (

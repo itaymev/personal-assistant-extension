@@ -69,10 +69,12 @@ export default function Notes(props: NotesProps) {
             <div id="saved-notes">
                 <ul>
                     {userNotes.map((note, index) => (
-                        <li key={index}>
-                            <textarea rows={1} cols={30} readOnly value={note}></textarea>
-                            <button onClick={() => editNote(index)}>Edit</button>
-                            <button onClick={() => deleteNote(index)}>Delete</button>
+                        <li key={index} style={{ position: 'relative' }}>
+                            <textarea rows={1} cols={30} readOnly value={note} onDoubleClick={() => editNote(index)}></textarea>
+                            <button onClick={() => deleteNote(index)}
+                                style={{position: 'absolute', right: 0, top: 0, background: 'none', border: 'none', color: 'red', cursor: 'pointer', fontSize: '16px', resize: 'none'}}>
+                                x
+                            </button>
                         </li>
                     ))}
                 </ul>
