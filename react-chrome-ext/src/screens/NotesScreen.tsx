@@ -10,6 +10,7 @@ export default function Notes(props: NotesProps) {
 
     const [userNotes, setUserNotes] = useState<string[]>([]);
     const [note, setNote] = useState('');
+    const [editIndex, setEditIndex] = useState<number | null>(null);
 
     useEffect(() => {
         loadSavedNotes();
@@ -28,13 +29,17 @@ export default function Notes(props: NotesProps) {
             alert('Maximum of 50 notes reached.');
             return;
         }
-        notes.push(note);
+        if (editIndex !== null) {
+            notes[editIndex] = note;
+            setEditIndex(null);
+        } else {
+            notes.push(note);
+        }
         chrome.storage.sync.set({ 'userNotes': notes }, () => {
             console.log('Note saved');
+            loadSavedNotes();
+            setNote('');
         });
-
-        loadSavedNotes();
-        setNote('');
     }
 
     // delete note
@@ -49,13 +54,29 @@ export default function Notes(props: NotesProps) {
         });
     }
 
+    // edit note
+    function editNote(index: number) {
+        setEditIndex(index);
+        setNote(userNotes[index]);
+    }
+
     return (
         <div id="notes-page">
             <h2>Notes</h2>
             <textarea id="note-textarea" placeholder="Type your notes here..." rows={4} cols={30} onChange={(event) => setNote(event.target.value)} value={note}></textarea>
             <br />
-            <button id="save-note" onClick={saveNotes}>Save Note</button>
-            <div id="saved-notes"></div>
+            <button id="save-note" onClick={saveNotes}>{editIndex !== null ? 'Update Note' : 'Save Note'}</button>
+            <div id="saved-notes">
+                <ul>
+                    {userNotes.map((note, index) => (
+                        <li key={index}>
+                            <textarea rows={1} cols={30} readOnly value={note}></textarea>
+                            <button onClick={() => editNote(index)}>Edit</button>
+                            <button onClick={() => deleteNote(index)}>Delete</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
             <button id="back-to-home" onClick={props.backToHome}>Back to Home</button>
         </div>
     )
