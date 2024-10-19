@@ -1,0 +1,1 @@
+pip install flask request jsonify goose3 transformers torch flask_cors
