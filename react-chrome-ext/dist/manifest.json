@@ -12,15 +12,5 @@
         "scripting",
         "tabs",
         "storage"
-    ],
-    "content_scripts": [
-        {
-            "matches": [
-                "<all_urls>"
-            ],
-            "js": [
-                "src/ChromeCalls.js"
-            ]
-        }
     ]
 }
