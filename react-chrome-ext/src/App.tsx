@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './App.css'; // Assuming you have a CSS file for styling
 
+//internal
+import Home from './screens/HomeScreen';
+
 export default function PersonalAssistant() {
   const [view, setView] = useState('home');
 
@@ -22,10 +25,7 @@ export default function PersonalAssistant() {
 
       {/* Home Page */}
       {view === 'home' && (
-        <div id="home-page">
-          <button id="notes-button" onClick={handleNotesClick}>Notes</button>
-          <button id="citation-button" onClick={handleCitationClick}>Citation</button>
-        </div>
+        <Home onClick={handleCitationClick} />
       )}
 
       {/* Note-taking section */}
