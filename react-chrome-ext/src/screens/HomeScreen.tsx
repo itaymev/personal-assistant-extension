@@ -8,10 +8,10 @@ type HomeProps = {
 export default function Home(props: HomeProps) {
 
     return (
-        <div id="home-page">
-            <button id="notes-button" onClick={props.notesNav}>Notes</button>
-            <button id="citation-button" onClick={props.citationNav}>Citation</button>
-            <button id="citation-button" onClick={props.summarizeNav}>Summarize</button>
+        <div className="popup-buttons">
+            <button className="popup-button" onClick={props.notesNav}>Notes</button>
+            <button className="popup-button" onClick={props.citationNav}>Citation</button>
+            <button className="popup-button" onClick={props.summarizeNav}>Summarize</button>
         </div>
     )
 }

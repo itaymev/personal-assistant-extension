@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 type NotesProps = {
-    backToHome: () => void;
+    backToHome?: () => void;
 }
 
 export default function Notes(props: NotesProps) {
@@ -124,7 +124,6 @@ export default function Notes(props: NotesProps) {
                     ))}
                 </ul>
             </div>
-            <button id="back-to-home" onClick={props.backToHome}>Back to Home</button>
         </div>
     )
 }

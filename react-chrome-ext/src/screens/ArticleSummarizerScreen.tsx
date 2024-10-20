@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 type ArticleSummarizerProps = {
-  backToHome: () => void;
+  backToHome?: () => void;
 }
 
 const ArticleSummarizer = (props: ArticleSummarizerProps) => {
@@ -84,7 +84,6 @@ const ArticleSummarizer = (props: ArticleSummarizerProps) => {
           <p>{summary}</p>
         </div>
       )}
-      <button onClick={props.backToHome}>Back to Home</button>
     </div>
   );
 };

@@ -48,3 +48,45 @@ body {
   padding: 5px;
   box-sizing: border-box;
 }
+
+.main-body {
+  width: 250px;
+  height: 250px;
+  border-radius: 10px;
+
+}
+
+/* Header with icons */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.popup-header .icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Buttons */
+.popup-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.popup-button {
+  width: 100px;
+  height: 60px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
