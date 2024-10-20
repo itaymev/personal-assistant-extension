@@ -63,30 +63,30 @@ export default function Citation(props: CitationProps) {
     }
 
     return (
-        <div id="citation-page" >
+        <div id="citation-page" className="citation-body" >
             <h2>Citation</h2>
             <div>
                 <label>URL:</label>
-                <input type="text" value={url} placeholder="URL" />
+                <input id="cite-input" type="text" value={url} placeholder="URL" />
             </div>
             <div>
                 <label>Title:</label>
-                <input type="text" value={title} placeholder="Title" />
+                <input id="cite-input" type="text" value={title} placeholder="Title" />
             </div>
             <div>
                 <label>Author:</label>
-                <input type="text" value={author} placeholder="Author" />
+                <input id="cite-input" type="text" value={author} placeholder="Author" />
             </div>
             <div>
                 <label>Publication Date:</label>
-                <input type="text" value={pubDate} placeholder="Publication Date" />
+                <input id="cite-input" type="text" value={pubDate} placeholder="Publication Date" />
             </div>
             <div>
                 <label>Website Name:</label>
-                <input type="text" value={name} placeholder="Website Name" />
+                <input id="cite-input" type="text" value={name} placeholder="Website Name" />
             </div>
             <button id="cite-button" onClick={fillAndCite}>Fill and Cite</button>
-            <div id="citation-result">{citation}</div>
+            {citation !== '' && (<div id="citation-result">{citation}</div>)}
         </div>
     )
 } 
