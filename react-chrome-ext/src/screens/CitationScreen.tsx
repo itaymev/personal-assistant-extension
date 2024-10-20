@@ -28,19 +28,30 @@ export default function Citation(props: CitationProps) {
         getCurrentTabUrl()
     }, [])
 
-    function fillAndCite() {
-        const pageDetails = {
-            url: window.location.href,
-            title: document.title || '',
-            author: document.querySelector('meta[name="author"]')?.getAttribute('content') ?? '',
-            publicationDate: document.querySelector('meta[name="date"]')?.getAttribute('content') ?? '',
-            websiteName: document.querySelector('meta[property="og:site_name"]')?.getAttribute('content') ?? window.location.hostname
-        };
-        setUrl(pageDetails.url);
-        setTitle(pageDetails.title);
-        setAuthor(pageDetails.author);
-        setPubDate(pageDetails.publicationDate);
-        setName(pageDetails.websiteName);
+    async function fillAndCite() {
+        try {
+
+            const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+            if (tabs.length > 0) {
+                setUrl(tabs[0].url || '');
+            }
+
+            chrome.tabs.sendMessage(tabs[0].id!, { action: "getPageDetails" }, (response) => {
+                if (response) {
+                    //setPageDetails(response.pageDetails);
+                    setUrl(response.pageDetails.url);
+                    setTitle(response.pageDetails.title);
+                    setAuthor(response.pageDetails.author);
+                    setPubDate(response.pageDetails.publicationDate);
+                    setName(response.pageDetails.websiteName);
+                } else {
+                    console.error("No response from content script.");
+                }
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
