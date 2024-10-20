@@ -5,6 +5,14 @@ type CitationProps = {
     backToHome?: () => void;
 }
 
+interface PageDetails {
+    author: string;
+    title: string;
+    name: string;
+    pubDate: string;
+    url: string;
+}
+
 export default function Citation(props: CitationProps) {
 
     const [url, setUrl] = useState('');
@@ -39,13 +47,23 @@ export default function Citation(props: CitationProps) {
 
             chrome.tabs.sendMessage(tabs[0].id!, { action: "getPageDetails" }, (response) => {
                 if (response) {
-                    //setPageDetails(response.pageDetails);
-                    setUrl(response.pageDetails.url);
-                    setTitle(response.pageDetails.title);
-                    setAuthor(response.pageDetails.author);
-                    setPubDate(response.pageDetails.publicationDate);
-                    setName(response.pageDetails.websiteName);
-                    generateCitation(response.pageDetails);
+                    const pageDetails = {
+                        url: response.pageDetails.url,
+                        title: response.pageDetails.title,
+                        author: response.pageDetails.author,
+                        pubDate: response.pageDetails.publicationDate.split('T')[0],
+                        name: response.pageDetails.websiteName
+                    };
+    
+                    // Set individual state values
+                    setUrl(pageDetails.url);
+                    setTitle(pageDetails.title);
+                    setAuthor(pageDetails.author);
+                    setPubDate(pageDetails.pubDate);
+                    setName(pageDetails.name);
+    
+                    // Pass page details to the generateCitation function
+                    generateCitation(pageDetails);
                 } else {
                     console.error("No response from content script.");
                 }
@@ -56,9 +74,9 @@ export default function Citation(props: CitationProps) {
         }
     }
 
-    function generateCitation(pageDetails: any) {
-        const { url, title, author, publicationDate, websiteName } = pageDetails;
-        const citation = `${author}. "${title}." ${websiteName}, ${publicationDate}, ${url}.`;
+    function generateCitation(details: PageDetails) {
+        const { author, title, name, pubDate, url } = details;
+        const citation = `${author}. "${title}." ${name}, ${pubDate}, ${url}.`;
         setCitation(citation);
     }
 
