@@ -1,6 +1,7 @@
 /// <reference types="chrome"/>
 
 import { useEffect, useState } from "react";
+import '../App.css';
 
 type NotesProps = {
     backToHome?: () => void;
@@ -24,7 +25,7 @@ export default function Notes(props: NotesProps) {
     }
 
     function saveNotes() {
-        let notes = userNotes;
+        let notes = [...userNotes];
         if (notes?.length >= 50) {
             alert('Maximum of 50 notes reached.');
             return;
@@ -33,7 +34,10 @@ export default function Notes(props: NotesProps) {
             notes[editIndex] = note;
             setEditIndex(null);
         } else {
-            notes.push(note);
+            notes = [note, ...notes];
+            if (note === '') {
+                return;
+            }
         }
         chrome.storage.sync.set({ 'userNotes': notes }, () => {
             console.log('Note saved');
@@ -56,7 +60,12 @@ export default function Notes(props: NotesProps) {
 
     // edit note
     function editNote(index: number) {
-        setEditIndex(index);
+        setEditIndex(prev => {
+            if (prev === index) {
+                return null;
+            }
+            return index
+        });
     }
 
     // save edited note
@@ -94,7 +103,7 @@ export default function Notes(props: NotesProps) {
             <div id="saved-notes">
                 <ul id="note-ul">
                     {userNotes.map((note, index) => (
-                        <li id="note-list-item" key={index} style={{ position: 'relative', backgroundColor: editIndex === index ? "yellow" : undefined }}>
+                        <li id="note-list-item" key={index} style={{ position: 'relative', backgroundColor: editIndex === index ? 'var(--hover-color)' : undefined }}>
                             <div style={{ display: "flex", flexDirection: 'row' }}>
 
                                 <span

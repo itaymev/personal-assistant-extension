@@ -29,7 +29,7 @@ export default function PersonalAssistant() {
   return (
     <div className='main-body'>
       <div className='popup-header'>
-        <span className="icon" onClick={handleBackToHome}>&lt;</span>
+        {<span className="icon" onClick={handleBackToHome} style={view === 'home' ? { color: '#00000000' } : {}}>&lt;</span>}
         <h1>Ed</h1>
         <span className="icon" onClick={() => window.close()}>&times;</span>
       </div>
