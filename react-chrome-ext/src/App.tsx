@@ -51,7 +51,7 @@ export default function PersonalAssistant() {
 
         {/* Article Summarizer */}
         {view === 'summarize' && (
-          <ArticleSummarizer />
+          <ArticleSummarizer backToHome={handleBackToHome} />
         )}
       </div>
     </div>

@@ -8,22 +8,37 @@ type NotesProps = {
 }
 
 export default function Notes(props: NotesProps) {
-
     const [userNotes, setUserNotes] = useState<string[]>([]);
     const [note, setNote] = useState('');
     const [editIndex, setEditIndex] = useState<number | null>(null);
+    const [currentUrl, setCurrentUrl] = useState<string>('');
 
     useEffect(() => {
-        loadSavedNotes();
-    }, [])
+        getCurrentTabUrl().then((url) => {
+            setCurrentUrl(url || '');
+            loadSavedNotes(url || '');
+        });
+    }, []);
 
-    // load saved notes (on startup and after saving a new note)
-    function loadSavedNotes() {
-        chrome.storage.sync.get('userNotes', (data) => {
-            setUserNotes(data.userNotes ?? []);
-        })
+    // Retrieve the current tab URL
+    const getCurrentTabUrl = async (): Promise<string | undefined> => {
+        try {
+            const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+            return tabs[0].url;
+        } catch (error) {
+            console.error("Error getting current tab URL:", error);
+            return undefined;
+        }
+    };
+
+    // Load saved notes for the current URL
+    function loadSavedNotes(url: string) {
+        chrome.storage.sync.get(url, (data) => {
+            setUserNotes(data[url] ?? []);
+        });
     }
 
+    // Save notes for the current URL
     function saveNotes() {
         let notes = [...userNotes];
         if (notes?.length >= 50) {
@@ -39,50 +54,43 @@ export default function Notes(props: NotesProps) {
                 return;
             }
         }
-        chrome.storage.sync.set({ 'userNotes': notes }, () => {
-            console.log('Note saved');
-            loadSavedNotes();
+        chrome.storage.sync.set({ [currentUrl]: notes }, () => {
+            console.log('Note saved for URL:', currentUrl);
+            loadSavedNotes(currentUrl);
             setNote('');
         });
     }
 
-    // delete note
+    // Delete note for the current URL
     function deleteNote(index: number) {
-        chrome.storage.sync.get('userNotes', (data) => {
-            let notes = data.userNotes || [];
-            notes.splice(index, 1);
-            chrome.storage.sync.set({ 'userNotes': notes }, () => {
-                console.log('Note deleted');
-                loadSavedNotes();
-            });
+        let notes = [...userNotes];
+        notes.splice(index, 1);
+        chrome.storage.sync.set({ [currentUrl]: notes }, () => {
+            console.log('Note deleted for URL:', currentUrl);
+            loadSavedNotes(currentUrl);
         });
     }
 
-    // edit note
+    // Edit note
     function editNote(index: number) {
-        setEditIndex(prev => {
-            if (prev === index) {
-                return null;
-            }
-            return index
-        });
+        setEditIndex(prev => (prev === index ? null : index));
         setNote(userNotes[index]);
     }
 
-    // save edited note
+    // Save edited note
     function saveEditedNote(index: number, newNote: string) {
-        let notes = userNotes;
+        let notes = [...userNotes];
         if (newNote !== '') {
             notes[index] = newNote;
         }
-        chrome.storage.sync.set({ 'userNotes': notes }, () => {
-            console.log('Note updated');
-            loadSavedNotes();
+        chrome.storage.sync.set({ [currentUrl]: notes }, () => {
+            console.log('Note updated for URL:', currentUrl);
+            loadSavedNotes(currentUrl);
             setEditIndex(null);
         });
     }
 
-    // handle key press
+    // Handle key press
     function handleKeyPress(event: React.KeyboardEvent<HTMLTextAreaElement>, index?: number) {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -96,31 +104,37 @@ export default function Notes(props: NotesProps) {
 
     return (
         <div id="notes-page">
-            <textarea id="note-textarea" placeholder="Type your notes here..." rows={4} cols={30} onKeyDown={handleKeyPress} onChange={(event) => setNote(event.target.value)} value={note}></textarea>
+            <textarea 
+                id="note-textarea" 
+                placeholder="Type your notes here..." 
+                rows={4} 
+                cols={30} 
+                onKeyDown={handleKeyPress} 
+                onChange={(event) => setNote(event.target.value)} 
+                value={note}
+            ></textarea>
             <div id="note-header">
-                <h2 id="note-h2">Notes</h2>
-                <button id="save-note" onClick={saveNotes}>{editIndex !== null ? 'Edit Note' : 'Save Note'}</button>
+                <h2 id="note-h2">Notes for: {currentUrl}</h2>
+                <button id="save-note" onClick={saveNotes}>
+                    {editIndex !== null ? 'Edit Note' : 'Save Note'}
+                </button>
             </div>
             <div id="saved-notes">
                 <ul id="note-ul">
                     {userNotes.map((note, index) => (
-                        <li id="note-list-item" key={index} style={{ position: 'relative', backgroundColor: editIndex === index ? 'var(--hover-color)' : undefined }}>
+                        <li 
+                            id="note-list-item" 
+                            key={index} 
+                            style={{ position: 'relative', backgroundColor: editIndex === index ? 'var(--hover-color)' : undefined }}
+                        >
                             <div style={{ display: "flex", flexDirection: 'row' }}>
-
                                 <span
                                     id="note-list-item-text"
                                     onClick={() => editNote(index)}
-                                    // onBlur={(event) => saveEditedNote(index, (event.target as HTMLTextAreaElement).value)}
-                                    // onKeyPress={(event) => handleKeyPress(event, index)}
-                                    // onChange={(event) => {
-                                    //     if (editIndex === index) {
-                                    //         const updatedNotes = [...userNotes];
-                                    //         updatedNotes[index] = event.target.value;
-                                    //         setUserNotes(updatedNotes);
-                                    //     }
-                                    // }}
-                                    style={{ resize: 'none' }} // Lock the size of the textarea
-                                >{editIndex === index ? note : userNotes[index]}</span>
+                                    style={{ resize: 'none' }}
+                                >
+                                    {editIndex === index ? note : userNotes[index]}
+                                </span>
                                 <button
                                     onClick={() => deleteNote(index)}
                                     id="note-x"
@@ -133,5 +147,5 @@ export default function Notes(props: NotesProps) {
                 </ul>
             </div>
         </div>
-    )
+    );
 }
