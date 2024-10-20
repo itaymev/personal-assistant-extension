@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css'; // Assuming you have a CSS file for styling
-import ArticleSummarizer from './articleSummarizer';
+import ArticleSummarizer from './screens/ArticleSummarizerScreen';
 
 //internal
 import Home from './screens/HomeScreen';
@@ -18,6 +18,10 @@ export default function PersonalAssistant() {
     setView('citation');
   };
 
+  const handleSummarizeClick = () => {
+    setView('summarize');
+  };
+
   const handleBackToHome = () => {
     setView('home');
   };
@@ -28,7 +32,7 @@ export default function PersonalAssistant() {
 
       {/* Home Page */}
       {view === 'home' && (
-        <Home notesNav={handleNotesClick} citationNav={handleCitationClick} />
+        <Home notesNav={handleNotesClick} citationNav={handleCitationClick} summarizeNav={handleSummarizeClick} />
       )}
 
       {/* Note-taking section */}
@@ -40,7 +44,11 @@ export default function PersonalAssistant() {
       {view === 'citation' && (
         <Citation backToHome={handleBackToHome} />
       )}
-      <ArticleSummarizer/>
+
+      {/* Article Summarizer */}
+      {view === 'summarize' && (
+        <ArticleSummarizer backToHome={handleBackToHome} />
+      )}
     </div>
   );
 }
