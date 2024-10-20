@@ -104,37 +104,31 @@ export default function Notes(props: NotesProps) {
 
     return (
         <div id="notes-page">
-            <textarea 
-                id="note-textarea" 
-                placeholder="Type your notes here..." 
-                rows={4} 
-                cols={30} 
-                onKeyDown={handleKeyPress} 
-                onChange={(event) => setNote(event.target.value)} 
-                value={note}
-            ></textarea>
+            <textarea id="note-textarea" placeholder="Type your notes here..." rows={4} cols={30} onKeyDown={handleKeyPress} onChange={(event) => setNote(event.target.value)} value={note}></textarea>
             <div id="note-header">
-                <h2 id="note-h2">Notes for: {currentUrl}</h2>
-                <button id="save-note" onClick={saveNotes}>
-                    {editIndex !== null ? 'Edit Note' : 'Save Note'}
-                </button>
+                <h2 id="note-h2">Notes</h2>
+                <button id="save-note" onClick={saveNotes}>{editIndex !== null ? 'Edit Note' : 'Save Note'}</button>
             </div>
             <div id="saved-notes">
                 <ul id="note-ul">
                     {userNotes.map((note, index) => (
-                        <li 
-                            id="note-list-item" 
-                            key={index} 
-                            style={{ position: 'relative', backgroundColor: editIndex === index ? 'var(--hover-color)' : undefined }}
-                        >
+                        <li id="note-list-item" key={index} style={{ position: 'relative', backgroundColor: editIndex === index ? 'var(--hover-color)' : undefined }}>
                             <div style={{ display: "flex", flexDirection: 'row' }}>
+
                                 <span
                                     id="note-list-item-text"
                                     onClick={() => editNote(index)}
-                                    style={{ resize: 'none' }}
-                                >
-                                    {editIndex === index ? note : userNotes[index]}
-                                </span>
+                                    // onBlur={(event) => saveEditedNote(index, (event.target as HTMLTextAreaElement).value)}
+                                    // onKeyPress={(event) => handleKeyPress(event, index)}
+                                    // onChange={(event) => {
+                                    //     if (editIndex === index) {
+                                    //         const updatedNotes = [...userNotes];
+                                    //         updatedNotes[index] = event.target.value;
+                                    //         setUserNotes(updatedNotes);
+                                    //     }
+                                    // }}
+                                    style={{ resize: 'none' }} // Lock the size of the textarea
+                                >{editIndex === index ? note : userNotes[index]}</span>
                                 <button
                                     onClick={() => deleteNote(index)}
                                     id="note-x"

@@ -80,7 +80,7 @@ const ArticleSummarizer = (props: ArticleSummarizerProps) => {
   return (
     <div>
       <h2 className='text-center'>Article Summarizer</h2>
-        <div className="flex flex-col items-center justify-center h-auto w-auto bg-gray-100">
+        <div className="flex flex-col items-center justify-center bg-gray-100 w-full space-between">
               <label htmlFor="threshold-slider" className="mb-2 text-lg font-semibold text-center">Select Threshold</label>
               <input
                   type="range"
@@ -90,21 +90,15 @@ const ArticleSummarizer = (props: ArticleSummarizerProps) => {
                   step="1"
                   value={value}
                   onChange={handleSliderChange}
-                  className="slider w-64 cursor-pointer"
+                  className="slider w-75 cursor-pointer"
               />
-              <div className="flex justify-between items-center w-full mt-4">
+              <div className="flex justify-between items-center w-75 mt-4">
                   <span className="text-sm">Low</span>
                   <span className="text-sm">Medium</span>
                   <span className="text-sm">High</span>
               </div>
               <p className="mt-4 text-lg">Current Value: {getThresholdText()}</p>
       </div>
-      <input
-        type="text"
-        value={url}
-        readOnly
-        placeholder="Current article URL"
-      />
       <button onClick={summarizeArticle} disabled={loading || !url}>
         {loading ? 'Summarizing...' : 'Summarize'}
       </button>
