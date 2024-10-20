@@ -66,6 +66,7 @@ export default function Notes(props: NotesProps) {
             }
             return index
         });
+        setNote(userNotes[index]);
     }
 
     // save edited note
@@ -98,7 +99,7 @@ export default function Notes(props: NotesProps) {
             <textarea id="note-textarea" placeholder="Type your notes here..." rows={4} cols={30} onKeyDown={handleKeyPress} onChange={(event) => setNote(event.target.value)} value={note}></textarea>
             <div id="note-header">
                 <h2 id="note-h2">Notes</h2>
-                <button id="save-note" onClick={saveNotes}>{editIndex !== null ? 'Update Note' : 'Save Note'}</button>
+                <button id="save-note" onClick={saveNotes}>{editIndex !== null ? 'Edit Note' : 'Save Note'}</button>
             </div>
             <div id="saved-notes">
                 <ul id="note-ul">
