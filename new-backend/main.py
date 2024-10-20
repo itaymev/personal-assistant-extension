@@ -11,6 +11,12 @@ goose = Goose()
 device = 0 if torch.cuda.is_available() else -1
 summarizer = pipeline("summarization", device=device)
 
+def split_text(text, max_words):
+    """Splits the text into chunks with a maximum number of words."""
+    words = text.split()
+    chunks = [' '.join(words[i:i+max_words]) for i in range(0, len(words), max_words)]
+    return chunks
+
 @app.route('/summarize', methods=['POST'])
 def extract_article():
     print("Received a request to summarize.")
@@ -24,34 +30,48 @@ def extract_article():
     # Extract article content
     try:
         article = goose.extract(url=url)
-
-        print(f"Title: {article.title}")
-        print(f"Meta Description: {article.meta_description}")
-        print(f"Meta Keywords: {article.meta_keywords}")
-        print(f"Publish Date: {article.publish_date}")
-        print(f"Additional Date: {article.additional_data}")
-        print(f"Doc: {article.doc}")
-        print(f"Authors: {article.authors}")
-
-
-
         content = article.cleaned_text
         print(f"Extracted content: {content}")
 
+        # Define total token limits based on the `length` variable
+        token_limits = {0: 100, 1: 200, 2: 500}
+        max_total_tokens = token_limits.get(length, 100)
+
         if article.meta_description and length == 0:
             return jsonify({'text': content, 'summary': article.meta_description})
-    
-        else:
-            maxLength = 150 + 200 * length
-            print(maxLength)
-            summary = summarizer(content, max_length=150, min_length=30, do_sample=True)
-            return jsonify({'text': content, 'summary': summary[0]['summary_text']})
 
+        else:
+            # Split the content into smaller chunks
+            words_per_chunk = 500  # Adjust based on your model's limits
+            content_chunks = split_text(content, words_per_chunk)
+            print(f"Number of chunks: {len(content_chunks)}")
+
+            summaries = []
+            total_tokens = 0
+
+            for chunk in content_chunks:
+                # Summarize each chunk
+                summary = summarizer(chunk, max_length=100, do_sample=True)
+                summary_text = summary[0]['summary_text']
+                summary_tokens = len(summary_text.split())
+
+                # Stop concatenating if we exceed the total token limit
+                if total_tokens + summary_tokens > max_total_tokens:
+                    remaining_tokens = max_total_tokens - total_tokens
+                    # Truncate the last summary to fit the remaining token limit
+                    truncated_summary = ' '.join(summary_text.split()[:remaining_tokens])
+                    summaries.append(truncated_summary)
+                    break
+                else:
+                    summaries.append(summary_text)
+                    total_tokens += summary_tokens
+
+            # Concatenate the summaries from all chunks
+            final_summary = ' '.join(summaries)
+            return jsonify({'text': content, 'summary': final_summary})
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
-   
 
 if __name__ == '__main__':
     app.run(port=5000)
