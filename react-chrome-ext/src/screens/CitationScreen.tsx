@@ -12,6 +12,7 @@ export default function Citation(props: CitationProps) {
     const [author, setAuthor] = useState('');
     const [pubDate, setPubDate] = useState('');
     const [name, setName] = useState('');
+    const [citation, setCitation] = useState('');
 
     useEffect(() => {
         const getCurrentTabUrl = async () => {
@@ -30,7 +31,7 @@ export default function Citation(props: CitationProps) {
 
     async function fillAndCite() {
         try {
-
+            
             const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
             if (tabs.length > 0) {
                 setUrl(tabs[0].url || '');
@@ -44,6 +45,7 @@ export default function Citation(props: CitationProps) {
                     setAuthor(response.pageDetails.author);
                     setPubDate(response.pageDetails.publicationDate);
                     setName(response.pageDetails.websiteName);
+                    generateCitation(response.pageDetails);
                 } else {
                     console.error("No response from content script.");
                 }
@@ -52,6 +54,12 @@ export default function Citation(props: CitationProps) {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    function generateCitation(pageDetails: any) {
+        const { url, title, author, publicationDate, websiteName } = pageDetails;
+        const citation = `${author}. "${title}." ${websiteName}, ${publicationDate}, ${url}.`;
+        setCitation(citation);
     }
 
     return (
@@ -78,7 +86,7 @@ export default function Citation(props: CitationProps) {
                 <input type="text" value={name} placeholder="Website Name" />
             </div>
             <button id="cite-button" onClick={fillAndCite}>Fill and Cite</button>
-            <div id="citation-result"></div>
+            <div id="citation-result">{citation}</div>
             <button id="back-to-home-citation" onClick={props.backToHome}>Back to Home</button>
         </div>
     )
