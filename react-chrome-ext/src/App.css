@@ -1,27 +1,142 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Colors */
+:root {
+  --header-bg-color: #ffffff;
+  --container-bg: #e8e8e8;
+  --background-color: #f0f0f0;
+  --scroll-color: #d3d1d1;
+  --border-color: #ccc;
+  --text-color: #000000;
+  --primary-color: #007bff;
+  --hover-color: yellow;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --header-bg-color: #373737;
+    --container-bg: #272727;
+    --background-color: #1d1d1d;
+    --scroll-color: #373737;
+    --border-color: #4d4d4d;
+    --text-color: #eeeeee;
+    --primary-color: #1a73e8;
+    --hover-color: #4b4b4b;
+  }
+}
 
 body {
   font-family: Arial, sans-serif;
-  padding: 10px;
+  margin: 0;
+  color: var(--text-color);
 }
 
 .hidden {
   display: none;
 }
 
+#cite-button {
+  height: 1.75em;
+  border-radius: 5px;
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+#cite-input {
+  background-color: var(--header-bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
 #note-textarea {
-  width: 100%;
+  width: 92%;
   margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 4%;
+  resize: none;
+  overflow: hidden;
+  background-color: var(--header-bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color)
+}
+
+#note-header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+#note-h2 {
+  font-size: 1.5em;
+  margin-block: 0;
 }
 
 #save-note {
-  margin-bottom: 10px;
+  height: 1.75em;
+  border-radius: 5px;
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
+
+#note-ul {
+  padding-inline-start: 20px;
+}
+
+#note-list-item {
+  margin-top: 7.5%;
+  margin-bottom: 7.5%;
+  padding: 2%;
+  margin-inline: 10px;
+  border-radius: 5px;
+}
+
+#note-list-item:hover {
+  background-color: var(--hover-color);
+  cursor: pointer;
+}
+
+#note-list-item-text {
+  display: flex;
+  width: 100%;
+}
+
+#note-x {
+  width: 25px;
+  border-width: 0;
+  background-color: #00000000;
+  color: red;
+}
+
 
 #saved-notes {
   margin-top: 10px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  background-color: var(--background-color);
+  width: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--background-color);
+  border-radius: 10px;
 }
 
 .note {
@@ -38,6 +153,18 @@ body {
   margin-top: 5px;
 }
 
+.citation-body {
+  width: 300px;
+}
+
+#citation-result {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: var(--container-bg);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
 #citation-page div {
   margin-bottom: 10px;
 }
@@ -51,4 +178,59 @@ body {
   width: 100%;
   padding: 5px;
   box-sizing: border-box;
+}
+
+.main-body {
+  width: 300px;
+  height: 220px;
+  border-radius: 10px;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+}
+
+.inner-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--background-color);
+}
+
+/* Header with icons */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 10px;
+  background-color: var(--header-bg-color);
+}
+
+.popup-header .icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Buttons */
+.popup-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
+}
+
+.popup-button {
+  width: 100px;
+  height: 60px;
+  background-color: var(--header-bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
 }

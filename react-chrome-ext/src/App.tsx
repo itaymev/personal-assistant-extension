@@ -27,28 +27,33 @@ export default function PersonalAssistant() {
   };
 
   return (
-    <div>
-      <h1>Ed</h1>
+    <div className='main-body'>
+      <div className='popup-header'>
+        {<span className="icon" onClick={handleBackToHome} style={view === 'home' ? { color: '#00000000' } : {}}>&lt;</span>}
+        <h1>Ed</h1>
+        <span className="icon" onClick={() => window.close()}>&times;</span>
+      </div>
+      <div className='inner-body'>
+        {/* Home Page */}
+        {view === 'home' && (
+          <Home notesNav={handleNotesClick} citationNav={handleCitationClick} summarizeNav={handleSummarizeClick} />
+        )}
 
-      {/* Home Page */}
-      {view === 'home' && (
-        <Home notesNav={handleNotesClick} citationNav={handleCitationClick} summarizeNav={handleSummarizeClick} />
-      )}
+        {/* Note-taking section */}
+        {view === 'notes' && (
+          <Notes />
+        )}
 
-      {/* Note-taking section */}
-      {view === 'notes' && (
-        <Notes backToHome={handleBackToHome} />
-      )}
+        {/* Citation section */}
+        {view === 'citation' && (
+          <Citation />
+        )}
 
-      {/* Citation section */}
-      {view === 'citation' && (
-        <Citation backToHome={handleBackToHome} />
-      )}
-
-      {/* Article Summarizer */}
-      {view === 'summarize' && (
-        <ArticleSummarizer backToHome={handleBackToHome} />
-      )}
+        {/* Article Summarizer */}
+        {view === 'summarize' && (
+          <ArticleSummarizer />
+        )}
+      </div>
     </div>
   );
 }
