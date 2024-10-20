@@ -1,6 +1,6 @@
 body {
   font-family: Arial, sans-serif;
-  padding: 10px;
+  padding: 5px;
 }
 
 .hidden {
@@ -8,16 +8,63 @@ body {
 }
 
 #note-textarea {
-  width: 100%;
+  width: 92%;
   margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 4%;
+}
+
+#note-header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+#note-h2 {
+  font-size: 1.5em;
+  margin-block: 0;
 }
 
 #save-note {
-  margin-bottom: 10px;
+  height: 1.75em;
+  border-radius: 5px;
+  border-width: 2px;
 }
+
+#note-ul {
+  padding-inline-start: 20px;
+}
+
+#note-list-item {
+  margin-top: 7.5%;
+  margin-bottom: 7.5%;
+  padding: 2%;
+}
+
+#note-list-item:hover {
+  border-radius: 5px;
+  background-color: yellow;
+  cursor: pointer;
+}
+
+#note-list-item-text {
+  display: flex;
+  width: 100%;
+}
+
+#note-x {
+  width: 25px;
+  border-width: 0;
+  background-color: #00000000;
+  color: red;
+}
+
 
 #saved-notes {
   margin-top: 10px;
+  height: 300px;
+  overflow-y: auto;
 }
 
 .note {
@@ -50,10 +97,18 @@ body {
 }
 
 .main-body {
-  width: 250px;
-  height: 250px;
+  width: 300px;
+  height: 220px;
   border-radius: 10px;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+}
 
+.inner-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Header with icons */
@@ -61,7 +116,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
 }
 
 .popup-header .icon {
@@ -74,6 +128,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  align-items: center;
   gap: 20px;
 }
 

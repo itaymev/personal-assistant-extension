@@ -62,7 +62,9 @@ export default function Notes(props: NotesProps) {
     // save edited note
     function saveEditedNote(index: number, newNote: string) {
         let notes = userNotes;
-        notes[index] = newNote;
+        if (newNote !== '') {
+            notes[index] = newNote;
+        }
         chrome.storage.sync.set({ 'userNotes': notes }, () => {
             console.log('Note updated');
             loadSavedNotes();
@@ -71,55 +73,51 @@ export default function Notes(props: NotesProps) {
     }
 
     // handle key press
-    function handleKeyPress(event: React.KeyboardEvent<HTMLTextAreaElement>, index: number) {
+    function handleKeyPress(event: React.KeyboardEvent<HTMLTextAreaElement>, index?: number) {
         if (event.key === 'Enter') {
             event.preventDefault();
-            saveEditedNote(index, (event.target as HTMLTextAreaElement).value);
+            if (index === undefined) {
+                saveNotes();
+            } else {
+                saveEditedNote(index, (event.target as HTMLTextAreaElement).value);
+            }
         }
     }
 
     return (
         <div id="notes-page">
-            <h2>Notes</h2>
-            <textarea id="note-textarea" placeholder="Type your notes here..." rows={4} cols={30} onChange={(event) => setNote(event.target.value)} value={note}></textarea>
-            <br />
-            <button id="save-note" onClick={saveNotes}>Save Note</button>
+            <textarea id="note-textarea" placeholder="Type your notes here..." rows={4} cols={30} onKeyDown={handleKeyPress} onChange={(event) => setNote(event.target.value)} value={note}></textarea>
+            <div id="note-header">
+                <h2 id="note-h2">Notes</h2>
+                <button id="save-note" onClick={saveNotes}>{editIndex !== null ? 'Update Note' : 'Save Note'}</button>
+            </div>
             <div id="saved-notes">
-                <ul>
+                <ul id="note-ul">
                     {userNotes.map((note, index) => (
-                        <li key={index} style={{ position: 'relative' }}>
-                            <textarea
-                                rows={1}
-                                cols={30}
-                                value={editIndex === index ? note : userNotes[index]}
-                                readOnly={editIndex !== index}
-                                onDoubleClick={() => editNote(index)}
-                                onBlur={(event) => saveEditedNote(index, (event.target as HTMLTextAreaElement).value)}
-                                onKeyPress={(event) => handleKeyPress(event, index)}
-                                onChange={(event) => {
-                                    if (editIndex === index) {
-                                        const updatedNotes = [...userNotes];
-                                        updatedNotes[index] = event.target.value;
-                                        setUserNotes(updatedNotes);
-                                    }
-                                }}
-                                style={{ resize: 'none' }} // Lock the size of the textarea
-                            ></textarea>
-                            <button
-                                onClick={() => deleteNote(index)}
-                                style={{
-                                    position: 'absolute',
-                                    right: 0,
-                                    top: 0,
-                                    background: 'none',
-                                    border: 'none',
-                                    color: 'red',
-                                    cursor: 'pointer',
-                                    fontSize: '16px',
-                                }}
-                            >
-                                x
-                            </button>
+                        <li id="note-list-item" key={index} style={{ position: 'relative', backgroundColor: editIndex === index ? "yellow" : undefined }}>
+                            <div style={{ display: "flex", flexDirection: 'row' }}>
+
+                                <span
+                                    id="note-list-item-text"
+                                    onClick={() => editNote(index)}
+                                    // onBlur={(event) => saveEditedNote(index, (event.target as HTMLTextAreaElement).value)}
+                                    // onKeyPress={(event) => handleKeyPress(event, index)}
+                                    // onChange={(event) => {
+                                    //     if (editIndex === index) {
+                                    //         const updatedNotes = [...userNotes];
+                                    //         updatedNotes[index] = event.target.value;
+                                    //         setUserNotes(updatedNotes);
+                                    //     }
+                                    // }}
+                                    style={{ resize: 'none' }} // Lock the size of the textarea
+                                >{editIndex === index ? note : userNotes[index]}</span>
+                                <button
+                                    onClick={() => deleteNote(index)}
+                                    id="note-x"
+                                >
+                                    x
+                                </button>
+                            </div>
                         </li>
                     ))}
                 </ul>

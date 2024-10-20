@@ -31,9 +31,9 @@ export default function PersonalAssistant() {
       <div className='popup-header'>
         <span className="icon" onClick={handleBackToHome}>&lt;</span>
         <h1>Ed</h1>
-        <span className="icon">&times;</span>
+        <span className="icon" onClick={() => window.close()}>&times;</span>
       </div>
-      <div>
+      <div className='inner-body'>
         {/* Home Page */}
         {view === 'home' && (
           <Home notesNav={handleNotesClick} citationNav={handleCitationClick} summarizeNav={handleSummarizeClick} />
