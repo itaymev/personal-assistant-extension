@@ -36,39 +36,35 @@ def extract_article():
         # Define total token limits based on the `length` variable
         token_limits = {0: 100, 1: 200, 2: 500}
         max_total_tokens = token_limits.get(length, 100)
+        
+        # Split the content into smaller chunks
+        words_per_chunk = 500  # Adjust based on your model's limits
+        content_chunks = split_text(content, words_per_chunk)
+        print(f"Number of chunks: {len(content_chunks)}")
 
-        if article.meta_description and length == 0:
-            return jsonify({'text': content, 'summary': article.meta_description})
+        summaries = []
+        total_tokens = 0
 
-        else:
-            # Split the content into smaller chunks
-            words_per_chunk = 500  # Adjust based on your model's limits
-            content_chunks = split_text(content, words_per_chunk)
-            print(f"Number of chunks: {len(content_chunks)}")
+        for chunk in content_chunks:
+            # Summarize each chunk
+            summary = summarizer(chunk, max_length=100, do_sample=True)
+            summary_text = summary[0]['summary_text']
+            summary_tokens = len(summary_text.split())
 
-            summaries = []
-            total_tokens = 0
+            # Stop concatenating if we exceed the total token limit
+            if total_tokens + summary_tokens > max_total_tokens:
+                remaining_tokens = max_total_tokens - total_tokens
+                # Truncate the last summary to fit the remaining token limit
+                truncated_summary = ' '.join(summary_text.split()[:remaining_tokens])
+                summaries.append(truncated_summary)
+                break
+            else:
+                summaries.append(summary_text)
+                total_tokens += summary_tokens
 
-            for chunk in content_chunks:
-                # Summarize each chunk
-                summary = summarizer(chunk, max_length=100, do_sample=True)
-                summary_text = summary[0]['summary_text']
-                summary_tokens = len(summary_text.split())
-
-                # Stop concatenating if we exceed the total token limit
-                if total_tokens + summary_tokens > max_total_tokens:
-                    remaining_tokens = max_total_tokens - total_tokens
-                    # Truncate the last summary to fit the remaining token limit
-                    truncated_summary = ' '.join(summary_text.split()[:remaining_tokens])
-                    summaries.append(truncated_summary)
-                    break
-                else:
-                    summaries.append(summary_text)
-                    total_tokens += summary_tokens
-
-            # Concatenate the summaries from all chunks
-            final_summary = ' '.join(summaries)
-            return jsonify({'text': content, 'summary': final_summary})
+        # Concatenate the summaries from all chunks
+        final_summary = ' '.join(summaries)
+        return jsonify({'text': content, 'summary': final_summary})
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

@@ -79,9 +79,9 @@ const ArticleSummarizer = (props: ArticleSummarizerProps) => {
 
   return (
     <div>
-      <h2>Article Summarizer</h2>
+      <h2 className='text-center'>Article Summarizer</h2>
         <div className="flex flex-col items-center justify-center h-auto w-auto bg-gray-100">
-              <label htmlFor="threshold-slider" className="mb-2 text-lg font-semibold self-center">Select Threshold:</label>
+              <label htmlFor="threshold-slider" className="mb-2 text-lg font-semibold text-center">Select Threshold</label>
               <input
                   type="range"
                   id="threshold-slider"
