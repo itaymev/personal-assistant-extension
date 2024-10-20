@@ -64,48 +64,44 @@ const ArticleSummarizer = (props: ArticleSummarizerProps) => {
   };
 
   const getThresholdText = () => {
-      switch (value) {
-          case 0:
-              return 'Low';
-          case 1:
-              return 'Medium';
-          case 2:
-              return 'High';
-          default:
-              return 'Low';
-      }
-  };  
+    switch (value) {
+      case 0:
+        return 'Low';
+      case 1:
+        return 'Medium';
+      case 2:
+        return 'High';
+      default:
+        return 'Low';
+    }
+  };
 
 
   return (
     <div>
       <h2>Article Summarizer</h2>
-        <div className="flex flex-col items-center justify-center h-auto w-auto bg-gray-100">
-              <label htmlFor="threshold-slider" className="mb-2 text-lg font-semibold self-center">Select Threshold:</label>
-              <input
-                  type="range"
-                  id="threshold-slider"
-                  min="0"
-                  max="2"
-                  step="1"
-                  value={value}
-                  onChange={handleSliderChange}
-                  className="slider w-64 cursor-pointer"
-              />
-              <div className="flex justify-between items-center w-full mt-4">
-                  <span className="text-sm">Low</span>
-                  <span className="text-sm">Medium</span>
-                  <span className="text-sm">High</span>
-              </div>
-              <p className="mt-4 text-lg">Current Value: {getThresholdText()}</p>
+      <div className="flex flex-col items-center justify-center h-auto w-auto bg-gray-100">
+        <label htmlFor="threshold-slider" className="mb-2 text-lg font-semibold self-center">Select Threshold:</label>
+        <input
+          type="range"
+          id="threshold-slider"
+          min="0"
+          max="2"
+          step="1"
+          value={value}
+          onChange={handleSliderChange}
+          className="slider w-64 cursor-pointer"
+        />
+        <p className="mt-4 text-lg">Current Value: {getThresholdText()}</p>
       </div>
       <input
+        id="cite-input"
         type="text"
         value={url}
         readOnly
         placeholder="Current article URL"
       />
-      <button onClick={summarizeArticle} disabled={loading || !url}>
+      <button id="cite-button" onClick={summarizeArticle} disabled={loading || !url}>
         {loading ? 'Summarizing...' : 'Summarize'}
       </button>
       {summary && (
