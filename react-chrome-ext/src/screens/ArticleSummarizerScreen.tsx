@@ -8,6 +8,7 @@ const ArticleSummarizer = (props: ArticleSummarizerProps) => {
   const [url, setUrl] = useState<string>('');
   const [summary, setSummary] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     const getCurrentTabUrl = async () => {
@@ -46,6 +47,7 @@ const ArticleSummarizer = (props: ArticleSummarizerProps) => {
       },
       body: JSON.stringify({
         url: url,
+        length: value,
       }),
     });
 
@@ -57,17 +59,45 @@ const ArticleSummarizer = (props: ArticleSummarizerProps) => {
     return data.summary; // This is correct based on your backend's response structure
   };
 
+  const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(Number(event.target.value));
+  };
+
+  const getThresholdText = () => {
+      switch (value) {
+          case 0:
+              return 'Low';
+          case 1:
+              return 'Medium';
+          case 2:
+              return 'High';
+          default:
+              return 'Low';
+      }
+  };  
+
 
   return (
     <div>
       <h2>Article Summarizer</h2>
-      <div className="slider-container">
-        <div className="slider">
-          <div className="block" data-index="0">Block 1</div>
-          <div className="block" data-index="1">Block 2</div>
-          <div className="block" data-index="2">Block 3</div>
-        </div>
-        <div className="active-block"></div>
+        <div className="flex flex-col items-center justify-center h-auto w-auto bg-gray-100">
+              <label htmlFor="threshold-slider" className="mb-2 text-lg font-semibold self-center">Select Threshold:</label>
+              <input
+                  type="range"
+                  id="threshold-slider"
+                  min="0"
+                  max="2"
+                  step="1"
+                  value={value}
+                  onChange={handleSliderChange}
+                  className="slider w-64 cursor-pointer"
+              />
+              <div className="flex justify-between items-center w-full mt-4">
+                  <span className="text-sm">Low</span>
+                  <span className="text-sm">Medium</span>
+                  <span className="text-sm">High</span>
+              </div>
+              <p className="mt-4 text-lg">Current Value: {getThresholdText()}</p>
       </div>
       <input
         type="text"
